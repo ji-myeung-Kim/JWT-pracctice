@@ -21,6 +21,7 @@ public class CorsConfig {
 		config.addAllowedHeader("*");
 //		모든 post,get, put delete,patch 요청을 허용하겠다.
 		config.addAllowedMethod("*");
+//		/api/**로 들어오는 모든 url들은 config설정을 따라줘라 
 		source.registerCorsConfiguration("/api/**", config);
 		return new CorsFilter(source);
 	}

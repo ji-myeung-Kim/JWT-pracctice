@@ -1,0 +1,19 @@
+유저네임, 패스워드 로그인 정상
+ 서버쪽 세션 id 생성
+  클라이어트 쿠키 세션 id를 응답
+  
+요청할 때마다 쿠키 값 세션 id를 항상 ㄷ르고 서버쪽으로 요청하기 때문에
+
+session.getAttribute("세션 값 확인");
+서버는  세션 id가 유효한지 판단해서 유효하면 인증이 필욯나 페이지로 접근하게 되면 됨
+우리가 id 비번 받고 맞을 경우 이 토큰을 클라이언트 브라우저쿠키의 세션 id를 저장 JSESSION
+
+
+JWT 토큰을 생성
+ 클라이언트 쪽으로 JWT토큰을 응답
+ 요청할 때마다 JWT토큰을 가지고 요철
+ 
+ 서버는 JWT토큰이 유효한지를 판단(필터를 만들어야 함)
+BearereyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.
+eyJzdWIiOiJjb3PthqDtgbAiLCJpZCI6MywiZXhwIjoxNjM3NDk0NDA5LCJ1c2VybmFtZSI6InRlc3QifQ.
+rZ095rkWilcapPZJ-NA7kv0AhfKpae9oP95uNZgw_NBv6LBom2J5JXCIL_LTiQPzddGkOMs2Wd6PLd0AnLEynQ
