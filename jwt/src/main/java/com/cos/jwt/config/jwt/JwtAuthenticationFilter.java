@@ -51,18 +51,24 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 			
 //			principalDetailsService의 loadByUsername() 함수가 실행된 후 정상이면 authentication이 리턴됨
 //			DB에 있는 username과 password가 일치한다.
+//			내 로그인 정보가 담김
 			Authentication authentication = 
 					authenticationManager.authenticate(authenticationToken); 
 		
 //			로그인이 되었다는 뜻			
+//			Object로 반환하기 때문에 PrincipalDetails로 다운 캐스팅 
+//			
 			PrincipalDetails principalDeatils = (PrincipalDetails) authentication.getPrincipal();
 			System.out.println("로그인 완료됨: " + principalDeatils.getUser().getUsername()); //로그인 정상적으로 되었다는뜻
 //			authentication 객체가 session영영게 저장됨 그 방법이 return 해주면 됨
 //			리턴의 이유는 권한 관리를 security가 대신 해주기 때문에 편하려고 하는거임
 //			굳이 JWT토큰을 사용하면서 세션을 만들 이유가 없음, 근데 단지 권한 처리때문에 session 넣어 줍니다.
+			
+//			authentication객체가 session  영역에 저장됨 
 			return authentication;
 		} catch (IOException e) {
-//			e.printStackTrace();
+			e.printStackTrace();
+			System.out.println("로그인 안됐어이자식아");
 		}
 		System.out.println("==============================");
 //		
@@ -70,9 +76,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 	}
 //	 attemptAuthentication 실 요청한 사용자에게 JWT토큰을 response해주면 됨
 	@Override
+//	attempt함수 뒤에 실행
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
 		System.out.println("sucessfulAuthentication 실행됨 : 인증이 완료");
+//		getPrincipal 인증되었는지 사실 여부
 		PrincipalDetails principalDeatils = (PrincipalDetails) authResult.getPrincipal();
 		
 //		RSA방식은 아니고 Hash 암호방식
@@ -81,8 +89,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 				.withExpiresAt(new Date(System.currentTimeMillis()+(60000 * 10)))
 				.withClaim("id", principalDeatils.getUser().getId())
 				.withClaim("username", principalDeatils.getUser().getUsername())
+//				HMAC512 서버만 알고있는 시크릿
+//				.sign(Algorithm.HMAC512("cos"));
 				.sign(Algorithm.HMAC512("cos"));
 
-		response.addHeader("Authorization", "Bearer" + jwtToken);
+		response.addHeader("Authorization", "Bearer " + jwtToken);
 	}
 }
